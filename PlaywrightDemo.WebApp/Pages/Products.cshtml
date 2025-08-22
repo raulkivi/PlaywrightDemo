@@ -1,0 +1,208 @@
+@page
+@model ProductsModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="container">
+    <h2>Product Catalog</h2>
+    <p>This page demonstrates search, filtering, and product interactions for Playwright testing.</p>
+    
+    <!-- Search and Filter Controls -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search products..." 
+                       id="searchInput" data-testid="search-input" value="@Model.SearchTerm">
+                <button class="btn btn-outline-secondary" type="button" 
+                        id="searchButton" data-testid="search-button">Search</button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="categoryFilter" data-testid="category-filter">
+                <option value="">All Categories</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="books">Books</option>
+                <option value="home">Home & Garden</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="sortBy" data-testid="sort-by">
+                <option value="name">Sort by Name</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Rating</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Product Grid -->
+    <div class="row" id="productGrid" data-testid="product-grid">
+        <div class="col-md-4 mb-4 product-item" data-category="electronics">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Wireless Headphones</h5>
+                    <p class="card-text">High-quality wireless headphones with noise cancellation.</p>
+                    <p class="card-text"><strong>$199.99</strong></p>
+                    <div class="rating mb-2">
+                        <span class="text-warning">★★★★☆</span> (4.2/5)
+                    </div>
+                    <button class="btn btn-primary btn-sm" data-testid="add-to-cart-1">Add to Cart</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" data-testid="view-details-1">View Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4 product-item" data-category="clothing">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Cotton T-Shirt</h5>
+                    <p class="card-text">Comfortable 100% cotton t-shirt in various colors.</p>
+                    <p class="card-text"><strong>$24.99</strong></p>
+                    <div class="rating mb-2">
+                        <span class="text-warning">★★★★★</span> (4.8/5)
+                    </div>
+                    <button class="btn btn-primary btn-sm" data-testid="add-to-cart-2">Add to Cart</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" data-testid="view-details-2">View Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4 product-item" data-category="books">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Programming Guide</h5>
+                    <p class="card-text">Comprehensive guide to modern web development practices.</p>
+                    <p class="card-text"><strong>$39.99</strong></p>
+                    <div class="rating mb-2">
+                        <span class="text-warning">★★★★☆</span> (4.5/5)
+                    </div>
+                    <button class="btn btn-primary btn-sm" data-testid="add-to-cart-3">Add to Cart</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" data-testid="view-details-3">View Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4 product-item" data-category="home">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Plant Pot Set</h5>
+                    <p class="card-text">Beautiful ceramic plant pots for indoor gardening.</p>
+                    <p class="card-text"><strong>$49.99</strong></p>
+                    <div class="rating mb-2">
+                        <span class="text-warning">★★★★☆</span> (4.1/5)
+                    </div>
+                    <button class="btn btn-primary btn-sm" data-testid="add-to-cart-4">Add to Cart</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" data-testid="view-details-4">View Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4 product-item" data-category="electronics">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Smart Watch</h5>
+                    <p class="card-text">Feature-rich smartwatch with fitness tracking.</p>
+                    <p class="card-text"><strong>$299.99</strong></p>
+                    <div class="rating mb-2">
+                        <span class="text-warning">★★★★★</span> (4.7/5)
+                    </div>
+                    <button class="btn btn-primary btn-sm" data-testid="add-to-cart-5">Add to Cart</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" data-testid="view-details-5">View Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4 product-item" data-category="clothing">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Denim Jeans</h5>
+                    <p class="card-text">Classic fit denim jeans in multiple sizes.</p>
+                    <p class="card-text"><strong>$79.99</strong></p>
+                    <div class="rating mb-2">
+                        <span class="text-warning">★★★★☆</span> (4.3/5)
+                    </div>
+                    <button class="btn btn-primary btn-sm" data-testid="add-to-cart-6">Add to Cart</button>
+                    <button class="btn btn-outline-secondary btn-sm ms-2" data-testid="view-details-6">View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Summary -->
+    <div class="mt-4 p-3 bg-light rounded" id="cartSummary" data-testid="cart-summary" style="display: none;">
+        <h5>Shopping Cart</h5>
+        <p>Items in cart: <span id="cartCount" data-testid="cart-count">0</span></p>
+        <button class="btn btn-success" data-testid="checkout-button">Proceed to Checkout</button>
+        <button class="btn btn-outline-danger ms-2" data-testid="clear-cart-button">Clear Cart</button>
+    </div>
+    
+    <div class="mt-4">
+        <a href="/" class="btn btn-secondary" data-testid="home-link">Back to Home</a>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let cartItems = 0;
+    const cartSummary = document.getElementById('cartSummary');
+    const cartCount = document.getElementById('cartCount');
+    
+    // Add to cart functionality
+    document.querySelectorAll('[data-testid^="add-to-cart"]').forEach(button => {
+        button.addEventListener('click', function() {
+            cartItems++;
+            cartCount.textContent = cartItems;
+            cartSummary.style.display = 'block';
+            this.textContent = 'Added!';
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-success');
+            
+            setTimeout(() => {
+                this.textContent = 'Add to Cart';
+                this.classList.remove('btn-success');
+                this.classList.add('btn-primary');
+            }, 2000);
+        });
+    });
+    
+    // Clear cart functionality
+    document.querySelector('[data-testid="clear-cart-button"]').addEventListener('click', function() {
+        cartItems = 0;
+        cartCount.textContent = cartItems;
+        cartSummary.style.display = 'none';
+    });
+    
+    // Search functionality
+    document.querySelector('[data-testid="search-button"]').addEventListener('click', function() {
+        const searchTerm = document.querySelector('[data-testid="search-input"]').value.toLowerCase();
+        const products = document.querySelectorAll('.product-item');
+        
+        products.forEach(product => {
+            const title = product.querySelector('.card-title').textContent.toLowerCase();
+            const description = product.querySelector('.card-text').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm) || description.includes(searchTerm) || searchTerm === '') {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+    
+    // Category filter
+    document.querySelector('[data-testid="category-filter"]').addEventListener('change', function() {
+        const selectedCategory = this.value;
+        const products = document.querySelectorAll('.product-item');
+        
+        products.forEach(product => {
+            if (selectedCategory === '' || product.getAttribute('data-category') === selectedCategory) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+});
+</script>

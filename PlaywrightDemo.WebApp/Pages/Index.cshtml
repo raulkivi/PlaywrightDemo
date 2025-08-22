@@ -1,0 +1,52 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Playwright Demo - Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Playwright Testing Demo</h1>
+    <p class="lead">This application demonstrates various UI elements for Playwright test recording and automation.</p>
+    
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Form</h5>
+                    <p class="card-text">Test form submissions, validations, and success messages.</p>
+                    <a href="/Contact" class="btn btn-primary" data-testid="contact-link">Go to Contact Form</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Product Catalog</h5>
+                    <p class="card-text">Test product listings, search, and filtering functionality.</p>
+                    <a href="/Products" class="btn btn-success" data-testid="products-link">Browse Products</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Interactive Elements</h5>
+                    <p class="card-text">Test dropdowns, modals, alerts, and dynamic content.</p>
+                    <a href="/Interactive" class="btn btn-warning" data-testid="interactive-link">Try Interactive Features</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">User Registration</h5>
+                    <p class="card-text">Test multi-step forms and user registration flow.</p>
+                    <a href="/Register" class="btn btn-info" data-testid="register-link">Register User</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

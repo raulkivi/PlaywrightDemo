@@ -1,0 +1,214 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "User Registration";
+}
+
+<div class="container">
+    <h2>User Registration</h2>
+    <p>This page demonstrates multi-step forms and user registration flow for Playwright testing.</p>
+    
+    @if (Model.IsRegistered)
+    {
+        <div class="alert alert-success" data-testid="registration-success">
+            <h4>Registration Successful!</h4>
+            <p>Welcome, @Model.FirstName @Model.LastName! Your account has been created successfully.</p>
+            <a href="/" class="btn btn-primary" data-testid="home-link-success">Go to Home</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <form method="post" data-testid="registration-form">
+                    <!-- Step 1: Personal Information -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Step 1: Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="firstName" class="form-label">First Name *</label>
+                                        <input type="text" class="form-control" id="firstName" name="FirstName" 
+                                               value="@Model.FirstName" data-testid="first-name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="lastName" class="form-label">Last Name *</label>
+                                        <input type="text" class="form-control" id="lastName" name="LastName" 
+                                               value="@Model.LastName" data-testid="last-name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                        <input type="date" class="form-control" id="dateOfBirth" name="DateOfBirth" 
+                                               value="@Model.DateOfBirth?.ToString("yyyy-MM-dd")" data-testid="date-of-birth">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="gender" class="form-label">Gender</label>
+                                        <select class="form-select" id="gender" name="Gender" data-testid="gender">
+                                            <option value="">Select gender...</option>
+                                            <option value="male" selected="@(Model.Gender == "male")">Male</option>
+                                            <option value="female" selected="@(Model.Gender == "female")">Female</option>
+                                            <option value="other" selected="@(Model.Gender == "other")">Other</option>
+                                            <option value="prefer-not-to-say" selected="@(Model.Gender == "prefer-not-to-say")">Prefer not to say</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Contact Information -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Step 2: Contact Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="Email" 
+                                       value="@Model.Email" data-testid="email" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="Phone" 
+                                       value="@Model.Phone" data-testid="phone">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" name="Address" rows="3" 
+                                          data-testid="address">@Model.Address</textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="city" name="City" 
+                                               value="@Model.City" data-testid="city">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="state" class="form-label">State/Province</label>
+                                        <input type="text" class="form-control" id="state" name="State" 
+                                               value="@Model.State" data-testid="state">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="zipCode" class="form-label">ZIP/Postal Code</label>
+                                        <input type="text" class="form-control" id="zipCode" name="ZipCode" 
+                                               value="@Model.ZipCode" data-testid="zip-code">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Account Setup -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Step 3: Account Setup</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username *</label>
+                                <input type="text" class="form-control" id="username" name="Username" 
+                                       value="@Model.Username" data-testid="username" required>
+                                <div class="form-text">Username must be at least 3 characters long.</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password *</label>
+                                        <input type="password" class="form-control" id="password" name="Password" 
+                                               data-testid="password" required>
+                                        <div class="form-text">Password must be at least 8 characters long.</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                                        <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword" 
+                                               data-testid="confirm-password" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Preferences -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Step 4: Preferences</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Interests (select all that apply):</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="tech" name="Interests" value="technology" 
+                                           data-testid="interest-tech" @(Model.Interests?.Contains("technology") == true ? "checked" : "")>
+                                    <label class="form-check-label" for="tech">Technology</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="sports" name="Interests" value="sports" 
+                                           data-testid="interest-sports" @(Model.Interests?.Contains("sports") == true ? "checked" : "")>
+                                    <label class="form-check-label" for="sports">Sports</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="music" name="Interests" value="music" 
+                                           data-testid="interest-music" @(Model.Interests?.Contains("music") == true ? "checked" : "")>
+                                    <label class="form-check-label" for="music">Music</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="travel" name="Interests" value="travel" 
+                                           data-testid="interest-travel" @(Model.Interests?.Contains("travel") == true ? "checked" : "")>
+                                    <label class="form-check-label" for="travel">Travel</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="newsletter" name="Newsletter" 
+                                           data-testid="newsletter" @(Model.Newsletter ? "checked" : "")>
+                                    <label class="form-check-label" for="newsletter">
+                                        Subscribe to our newsletter
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terms" name="AcceptTerms" 
+                                           data-testid="accept-terms" required @(Model.AcceptTerms ? "checked" : "")>
+                                    <label class="form-check-label" for="terms">
+                                        I accept the <a href="#" data-testid="terms-link">Terms and Conditions</a> *
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/" class="btn btn-secondary" data-testid="cancel-button">Cancel</a>
+                        <button type="submit" class="btn btn-primary" data-testid="register-button">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</div>

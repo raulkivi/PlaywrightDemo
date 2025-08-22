@@ -1,0 +1,87 @@
+@page "/legacy-test"
+@model PlaywrightDemo.WebApp.Pages.LegacyTestModel
+@{
+    ViewData["Title"] = "Legacy Test Page";
+}
+
+<div class="container">
+    <h2>Legacy Test Page</h2>
+    <p>This page demonstrates how Playwright recorder behaves without data-testid attributes.</p>
+    
+    @if (Model.IsSubmitted)
+    {
+        <div class="alert alert-success" id="success-msg">
+            <strong>Success!</strong> Your form has been submitted.
+        </div>
+    }
+    
+    <form method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="FirstName" 
+                           value="@Model.FirstName" placeholder="Enter first name">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control legacy-input" name="LastName" 
+                           value="@Model.LastName" placeholder="Enter last name">
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-control email-input" name="Email" 
+                   value="@Model.Email">
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Country</label>
+            <select class="form-select" name="Country">
+                <option value="">Select country...</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="UK">United Kingdom</option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" name="Message" rows="4">@Model.Message</textarea>
+        </div>
+        
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="Newsletter" value="true">
+            <label class="form-check-label">Subscribe to newsletter</label>
+        </div>
+        
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit Form</button>
+            <button type="button" class="btn btn-secondary ms-2">Cancel</button>
+        </div>
+        
+        <div class="mb-3">
+            <a href="/" class="nav-link">Go Home</a>
+            <span> | </span>
+            <a href="/Contact">Contact Page</a>
+        </div>
+        
+        <!-- Elements with various selection patterns -->
+        <div class="test-section mt-4">
+            <h4>Interactive Elements</h4>
+            <button class="btn btn-info" onclick="showAlert()">Show Alert</button>
+            <button class="btn btn-warning">Warning Button</button>
+            <input type="text" placeholder="Search products..." class="form-control mt-2">
+        </div>
+    </form>
+</div>
+
+<script>
+    function showAlert() {
+        alert('This is a test alert!');
+    }
+</script>
