@@ -14,8 +14,35 @@ public class PlaywrightTestBase : PageTest
     protected const string BaseUrl = "http://localhost:5275"; // Web app URL
     
     // Configurable folder paths for videos and screenshots
-    protected virtual string VideosFolder { get; set; } = "videos";
-    protected virtual string ScreenshotsFolder { get; set; } = "screenshots";
+    protected virtual string VideosFolder { get; set; } = GetDefaultVideosFolder();
+    protected virtual string ScreenshotsFolder { get; set; } = GetDefaultScreenshotsFolder();
+    
+    // CI/CD environment detection and path optimization
+    private static string GetDefaultVideosFolder()
+    {
+        // In Azure DevOps, organize artifacts for better pipeline integration
+        if (IsRunningInAzureDevOps())
+        {
+            return Path.Combine("TestResults", Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER") ?? "build", "videos");
+        }
+        return "videos";
+    }
+    
+    private static string GetDefaultScreenshotsFolder()
+    {
+        // In Azure DevOps, organize artifacts for better pipeline integration  
+        if (IsRunningInAzureDevOps())
+        {
+            return Path.Combine("TestResults", Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER") ?? "build", "screenshots");
+        }
+        return "screenshots";
+    }
+    
+    private static bool IsRunningInAzureDevOps()
+    {
+        return !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AGENT_NAME")) ||
+               !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD"));
+    }
     
     // Video recording configuration
     public override BrowserNewContextOptions ContextOptions()

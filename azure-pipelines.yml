@@ -1,0 +1,222 @@
+# Azure DevOps Pipeline for Playwright Tests
+# This pipeline runs Playwright tests and stores video/screenshot artifacts
+
+trigger:
+- main
+- develop
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  testResultsDirectory: '$(Agent.TempDirectory)/TestResults'
+  artifactsDirectory: '$(Build.ArtifactStagingDirectory)/test-artifacts'
+
+stages:
+- stage: Test
+  displayName: 'Run Playwright Tests'
+  jobs:
+  - job: PlaywrightTests
+    displayName: 'Execute Playwright Test Suite'
+    
+    steps:
+    # Setup .NET
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '9.0.x'
+        
+    # Restore dependencies
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore NuGet packages'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        
+    # Build the solution
+    - task: DotNetCoreCLI@2
+      displayName: 'Build solution'
+      inputs:
+        command: 'build'
+        projects: '**/*.sln'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+        
+    # Install Playwright browsers
+    - task: PowerShell@2
+      displayName: 'Install Playwright browsers'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd PlaywrightDemo.Tests/bin/$(buildConfiguration)/net9.0
+          pwsh ./playwright.ps1 install
+          
+    # Start the web application in background
+    - task: DotNetCoreCLI@2
+      displayName: 'Start Web Application'
+      inputs:
+        command: 'run'
+        projects: 'PlaywrightDemo.WebApp/PlaywrightDemo.WebApp.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+      # Note: Use a separate job or container for the web app in production
+      
+    # Wait for application to start
+    - task: PowerShell@2
+      displayName: 'Wait for application startup'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $timeout = 60
+          $uri = "http://localhost:5000"
+          do {
+            try {
+              $response = Invoke-WebRequest -Uri $uri -TimeoutSec 5
+              if ($response.StatusCode -eq 200) {
+                Write-Host "Application is ready!"
+                break
+              }
+            } catch {
+              Write-Host "Waiting for application..."
+              Start-Sleep -Seconds 2
+              $timeout -= 2
+            }
+          } while ($timeout -gt 0)
+          
+    # Run Playwright tests
+    - task: DotNetCoreCLI@2
+      displayName: 'Run Playwright Tests'
+      inputs:
+        command: 'test'
+        projects: 'PlaywrightDemo.Tests/PlaywrightDemo.Tests.csproj'
+        arguments: >
+          --configuration $(buildConfiguration) 
+          --logger "trx;LogFileName=playwright-results.trx" 
+          --logger "console;verbosity=normal"
+          --results-directory $(testResultsDirectory)
+          --collect:"XPlat Code Coverage"
+      continueOnError: true # Continue even if tests fail to collect artifacts
+      
+    # Create artifacts directory structure
+    - task: PowerShell@2
+      displayName: 'Organize test artifacts'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Create organized artifact structure
+          $artifactsDir = "$(artifactsDirectory)"
+          New-Item -ItemType Directory -Force -Path "$artifactsDir/videos"
+          New-Item -ItemType Directory -Force -Path "$artifactsDir/screenshots" 
+          New-Item -ItemType Directory -Force -Path "$artifactsDir/traces"
+          New-Item -ItemType Directory -Force -Path "$artifactsDir/reports"
+          
+          # Copy test outputs (only failed test artifacts due to our smart recording)
+          $testBinDir = "PlaywrightDemo.Tests/bin/$(buildConfiguration)/net9.0"
+          
+          # Copy videos (only failed tests are saved)
+          if (Test-Path "$testBinDir/videos") {
+            Copy-Item -Path "$testBinDir/videos/*" -Destination "$artifactsDir/videos/" -Force -ErrorAction SilentlyContinue
+          }
+          
+          # Copy screenshots (only failures)
+          if (Test-Path "$testBinDir/screenshots") {
+            Copy-Item -Path "$testBinDir/screenshots/*" -Destination "$artifactsDir/screenshots/" -Force -ErrorAction SilentlyContinue
+          }
+          
+          # Copy any traces
+          if (Test-Path "$testBinDir/traces") {
+            Copy-Item -Path "$testBinDir/traces/*" -Destination "$artifactsDir/traces/" -Force -ErrorAction SilentlyContinue
+          }
+          
+          # Copy test results
+          if (Test-Path "$(testResultsDirectory)") {
+            Copy-Item -Path "$(testResultsDirectory)/*" -Destination "$artifactsDir/reports/" -Force -Recurse -ErrorAction SilentlyContinue
+          }
+          
+          # Create summary report
+          $summary = @"
+          # Playwright Test Execution Summary
+          **Build:** $(Build.BuildNumber)
+          **Date:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+          **Branch:** $(Build.SourceBranchName)
+          **Commit:** $(Build.SourceVersion)
+          
+          ## Artifacts Collected
+          - Videos: Only failed tests (space-optimized)
+          - Screenshots: Failure screenshots
+          - Test Results: TRX format for Azure DevOps integration
+          
+          ## Viewing Results
+          - Download artifacts from the Pipeline run
+          - Videos are in WebM format (viewable in modern browsers)
+          - Screenshots are in PNG format
+          - Test results integrate with Azure DevOps Test tab
+          "@
+          
+          $summary | Out-File -FilePath "$artifactsDir/README.md" -Encoding UTF8
+          
+          # Log artifact counts
+          $videoCount = (Get-ChildItem "$artifactsDir/videos" -ErrorAction SilentlyContinue).Count
+          $screenshotCount = (Get-ChildItem "$artifactsDir/screenshots" -ErrorAction SilentlyContinue).Count
+          
+          Write-Host "##[section]Artifacts Summary:"
+          Write-Host "Videos collected (failed tests): $videoCount"
+          Write-Host "Screenshots collected: $screenshotCount"
+          
+    # Publish test results to Azure DevOps Test tab
+    - task: PublishTestResults@2
+      displayName: 'Publish test results'
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '**/*.trx'
+        searchFolder: '$(testResultsDirectory)'
+        mergeTestResults: true
+        failTaskOnFailedTests: false # Don't fail the build, we want artifacts
+      condition: always()
+      
+    # Publish artifacts to Azure DevOps (downloadable from pipeline)
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Playwright artifacts'
+      inputs:
+        targetPath: '$(artifactsDirectory)'
+        artifactName: 'playwright-test-artifacts-$(Build.BuildNumber)'
+        publishLocation: 'pipeline'
+      condition: always() # Always publish, even if tests failed
+      
+    # Optional: Publish to Azure Blob Storage for long-term retention
+    - task: AzureFileCopy@4
+      displayName: 'Upload artifacts to Azure Storage (Optional)'
+      inputs:
+        SourcePath: '$(artifactsDirectory)'
+        azureSubscription: 'YOUR_AZURE_SUBSCRIPTION' # Replace with your service connection
+        Destination: 'AzureBlob'
+        storage: 'YOUR_STORAGE_ACCOUNT' # Replace with your storage account
+        ContainerName: 'playwright-artifacts'
+        BlobPrefix: 'builds/$(Build.BuildNumber)'
+      condition: and(always(), ne(variables['Build.Reason'], 'PullRequest')) # Skip for PRs
+      continueOnError: true # Don't fail build if storage upload fails
+
+# Optional: Separate stage for generating HTML reports
+- stage: Reports
+  displayName: 'Generate Test Reports'
+  dependsOn: Test
+  condition: always()
+  jobs:
+  - job: GenerateReports
+    displayName: 'Create HTML Test Report'
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download test artifacts'
+      inputs:
+        artifactName: 'playwright-test-artifacts-$(Build.BuildNumber)'
+        targetPath: '$(Pipeline.Workspace)/artifacts'
+        
+    # Generate custom HTML report (optional)
+    - task: PowerShell@2
+      displayName: 'Generate HTML report'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Custom script to generate HTML report with embedded videos/screenshots
+          # This is optional - Azure DevOps Test tab provides good built-in reporting
+          Write-Host "Custom HTML report generation would go here"

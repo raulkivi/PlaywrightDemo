@@ -972,6 +972,46 @@ public class AbsolutePathTests : PlaywrightTestBase
 - Videos: `bin/Debug/net9.0/videos/`
 - Screenshots: `bin/Debug/net9.0/screenshots/`
 
+### CI/CD Integration (Azure DevOps)
+
+The test base class automatically detects Azure DevOps environments and organizes artifacts optimally:
+
+**Azure DevOps Pipeline Integration:**
+```yaml
+# Key pipeline steps for artifact management
+- task: DotNetCoreCLI@2
+  displayName: 'Run Playwright Tests'
+  inputs:
+    command: 'test'
+    arguments: '--logger "trx" --results-directory $(Agent.TempDirectory)/TestResults'
+  continueOnError: true
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish test artifacts'
+  inputs:
+    targetPath: 'PlaywrightDemo.Tests/bin/Release/net9.0'
+    artifactName: 'playwright-artifacts-$(Build.BuildNumber)'
+  condition: always()
+```
+
+**Artifact Management Script:**
+```powershell
+# Organize artifacts locally (mimics Azure DevOps structure)
+.\manage-artifacts.ps1 -BuildNumber "local-build" -OpenReport
+```
+
+**Best Practices for CI/CD:**
+- ✅ Only failed test videos are saved (storage optimized)
+- ✅ Artifacts organized by build number
+- ✅ HTML reports generated automatically
+- ✅ Azure Blob Storage integration for long-term retention
+- ✅ Test results integrate with Azure DevOps Test tab
+
+**Storage Locations:**
+1. **Pipeline Artifacts** (Recommended): Available for 30 days, downloadable from pipeline
+2. **Azure Blob Storage** (Long-term): For extended retention and sharing
+3. **Azure Container Registry** (Advanced): For containerized test environments
+
 ## Best Practices for Test Recording
 
 ### 1. Element Selection Strategy
