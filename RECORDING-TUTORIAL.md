@@ -679,10 +679,11 @@ After recording your first tests:
 5. **Scale**: Implement Page Object Model for larger applications
 
 ## 📚 Resources
-
-- [Playwright Codegen Documentation](https://playwright.dev/dotnet/codegen)
-- [Selectors Guide](https://playwright.dev/dotnet/selectors)
-- [Best Practices](https://playwright.dev/dotnet/best-practices)
-- [Debugging Tests](https://playwright.dev/dotnet/debug)
+ 
+- [Playwright Documentation](https://playwright.dev/dotnet/)
+ - [Playwright Codegen](https://playwright.dev/dotnet/docs/codegen)
+ - [Selectors / Locators Guide](https://playwright.dev/dotnet/docs/locators)
+ - [Best Practices](https://playwright.dev/docs/best-practices)
+ - [Debugging Tests](https://playwright.dev/dotnet/docs/debug)
 
 Happy testing! 🎭

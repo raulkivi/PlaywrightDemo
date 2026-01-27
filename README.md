@@ -1115,8 +1115,9 @@ dotnet test --filter "TestName" --logger:console
 ## Resources
 
 - [Playwright Documentation](https://playwright.dev/dotnet/)
-- [Playwright Test Generator](https://playwright.dev/dotnet/codegen)
-- [Best Practices Guide](https://playwright.dev/dotnet/best-practices)
-- [Debugging Guide](https://playwright.dev/dotnet/debug)
+ - [Playwright Codegen](https://playwright.dev/dotnet/docs/codegen)
+ - [Selectors / Locators Guide](https://playwright.dev/dotnet/docs/locators)
+ - [Best Practices Guide](https://playwright.dev/docs/best-practices)
+ - [Debugging Guide](https://playwright.dev/dotnet/docs/debug)
 
 This demo provides a comprehensive foundation for understanding Playwright test recording and automation. The sample application covers most common web interactions, and the test suite demonstrates various testing patterns and best practices.
