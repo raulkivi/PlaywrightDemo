@@ -34,6 +34,11 @@ This project demonstrates how to create and use Playwright for automated testing
 ```
 PlaywrightDemo/
 ├── PlaywrightDemo.sln
+├── README.md                       # This file
+├── MCP-GUIDE.md                    # Playwright MCP server guide (AI-assisted testing)
+├── RECORDING-TUTORIAL.md           # Step-by-step recording tutorial
+├── .vscode/
+│   └── mcp.json                    # MCP server configuration for VS Code / GitHub Copilot
 ├── PlaywrightDemo.WebApp/          # Sample web application
 │   ├── Pages/
 │   │   ├── Index.cshtml            # Home page with navigation
@@ -1103,14 +1108,33 @@ dotnet test --logger:console --verbosity detailed
 dotnet test --filter "TestName" --logger:console
 ```
 
+## 🤖 AI-Assisted Testing with Playwright MCP Server
+
+The [Playwright MCP server](https://github.com/microsoft/playwright-mcp) lets AI assistants (GitHub Copilot, Claude, etc.) control a real browser through Playwright to help you write, record, debug, and explore tests interactively.
+
+This repository includes `.vscode/mcp.json`, which automatically configures the server for VS Code with GitHub Copilot Agent Mode.
+
+**Key use cases:**
+
+| Use Case | Example Prompt |
+|----------|---------------|
+| **Write tests** | "Navigate to /Contact and generate a NUnit test for the form" |
+| **Record interactions** | "Open /Products, add 2 items to cart, then write a test" |
+| **Debug failures** | "Run the steps from ContactFormTests manually and check the selectors" |
+| **Explore app** | "List all data-testid attributes across all pages" |
+| **Verify UI** | "Take a screenshot of /Interactive after opening the modal" |
+
+See **[MCP-GUIDE.md](MCP-GUIDE.md)** for the full setup guide and detailed examples.
+
 ## Next Steps
 
 1. **Extend test coverage** - Add more test scenarios for edge cases
 2. **Page Object Model** - Refactor tests to use page objects for better maintainability
-3. **API testing** - Add Playwright API testing capabilities
-4. **Performance testing** - Use Playwright for performance monitoring
-5. **Accessibility testing** - Add automated accessibility checks
-6. **Visual regression testing** - Compare screenshots for visual changes
+3. **AI-assisted test writing** - Use the Playwright MCP server to generate tests from natural language (see [MCP-GUIDE.md](MCP-GUIDE.md))
+4. **API testing** - Add Playwright API testing capabilities
+5. **Performance testing** - Use Playwright for performance monitoring
+6. **Accessibility testing** - Add automated accessibility checks
+7. **Visual regression testing** - Compare screenshots for visual changes
 
 ## Resources
 
@@ -1119,5 +1143,6 @@ dotnet test --filter "TestName" --logger:console
  - [Selectors / Locators Guide](https://playwright.dev/dotnet/docs/locators)
  - [Best Practices Guide](https://playwright.dev/docs/best-practices)
  - [Debugging Guide](https://playwright.dev/dotnet/docs/debug)
+ - [Playwright MCP Server](https://github.com/microsoft/playwright-mcp)
 
 This demo provides a comprehensive foundation for understanding Playwright test recording and automation. The sample application covers most common web interactions, and the test suite demonstrates various testing patterns and best practices.
