@@ -53,7 +53,7 @@ PlaywrightDemo/
 
 ### Prerequisites
 
-- .NET 9.0 SDK
+- .NET 10.0 SDK
 - PowerShell (for Playwright browser installation)
 
 ### 1. Running the Web Application
@@ -80,7 +80,7 @@ PlaywrightDemo/
 
 2. Install Playwright browsers:
    ```powershell
-   pwsh -File bin/Debug/net9.0/playwright.ps1 install
+   pwsh -File bin/Debug/net10.0/playwright.ps1 install
    ```
 
 ### 3. Running Tests
@@ -262,13 +262,13 @@ await page.Locator("input[name='firstName']").FillAsync("John");
 2. **Use Playwright CLI through .NET** (choose your target framework):
    ```powershell
    # For NUnit (default)
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen https://localhost:7294
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen https://localhost:7294
    
    # For NUnit (explicit)
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target nunit https://localhost:7294
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target nunit https://localhost:7294
    
    # For MSTest
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target mstest https://localhost:7294
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target mstest https://localhost:7294
    ```
 
 ### Recording Best Practices
@@ -825,7 +825,7 @@ Screenshots are automatically captured when any test fails, including:
 - **Complete page HTML** content for debugging
 - **Organized file naming** with test name and timestamp
 
-Files are saved to: `bin/Debug/net9.0/screenshots/`
+Files are saved to: `bin/Debug/net10.0/screenshots/`
 
 Example filenames:
 - `FAILED_ContactFormTest_20250822_161514.png`
@@ -871,7 +871,7 @@ Every test starts video recording, but videos are **only saved when tests fail**
 - **Smart saving**: Videos are only kept when tests fail, saving disk space
 - **Automatic cleanup**: Passed test videos are automatically deleted
 - **Format**: WebM video files at 1280x720 resolution
-- **Storage**: `bin/Debug/net9.0/videos/`
+- **Storage**: `bin/Debug/net10.0/videos/`
 - **Naming**: `FAILED_TestName_Timestamp.webm`
 
 #### Benefits of This Approach
@@ -969,8 +969,8 @@ public class AbsolutePathTests : PlaywrightTestBase
 ```
 
 **Default locations:**
-- Videos: `bin/Debug/net9.0/videos/`
-- Screenshots: `bin/Debug/net9.0/screenshots/`
+- Videos: `bin/Debug/net10.0/videos/`
+- Screenshots: `bin/Debug/net10.0/screenshots/`
 
 ### CI/CD Integration (Azure DevOps)
 
@@ -989,7 +989,7 @@ The test base class automatically detects Azure DevOps environments and organize
 - task: PublishPipelineArtifact@1
   displayName: 'Publish test artifacts'
   inputs:
-    targetPath: 'PlaywrightDemo.Tests/bin/Release/net9.0'
+    targetPath: 'PlaywrightDemo.Tests/bin/Release/net10.0'
     artifactName: 'playwright-artifacts-$(Build.BuildNumber)'
   condition: always()
 ```
@@ -1077,7 +1077,7 @@ jobs:
       run: |
         cd PlaywrightDemo.Tests
         dotnet build
-        pwsh bin/Debug/net9.0/playwright.ps1 install --with-deps
+        pwsh bin/Debug/net10.0/playwright.ps1 install --with-deps
     - name: Run tests
       run: dotnet test --no-build --verbosity normal
 ```
@@ -1094,7 +1094,7 @@ jobs:
 ### Debug Commands
 ```powershell
 # Check Playwright installation
-pwsh -File bin/Debug/net9.0/playwright.ps1 install --help
+pwsh -File bin/Debug/net10.0/playwright.ps1 install --help
 
 # Run tests with detailed output
 dotnet test --logger:console --verbosity detailed

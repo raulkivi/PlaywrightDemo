@@ -16,21 +16,21 @@ playwright codegen http://localhost:5275
 
 # Option 2: Using local Playwright (default is NUnit)
 cd PlaywrightDemo.Tests
-pwsh -File bin/Debug/net9.0/playwright.ps1 codegen http://localhost:5275
+pwsh -File bin/Debug/net10.0/playwright.ps1 codegen http://localhost:5275
 
 # Option 3: Explicitly specify NUnit target
 playwright codegen --target nunit http://localhost:5275
 
 # Option 4: Using local Playwright with explicit NUnit target
 cd PlaywrightDemo.Tests
-pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target nunit http://localhost:5275
+pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target nunit http://localhost:5275
 
 # Option 5: Generate MSTest-compatible code (instead of default NUnit)
 playwright codegen --target mstest http://localhost:5275
 
 # Option 6: Using local Playwright with MSTest target
 cd PlaywrightDemo.Tests
-pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target mstest http://localhost:5275
+pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target mstest http://localhost:5275
 ```
 
 ### Step 2: Record a Contact Form Test
@@ -352,15 +352,15 @@ playwright codegen --target csharp http://localhost:5275
 
 # Using local Playwright with NUnit (default)
 cd PlaywrightDemo.Tests
-pwsh -File bin/Debug/net9.0/playwright.ps1 codegen http://localhost:5275
+pwsh -File bin/Debug/net10.0/playwright.ps1 codegen http://localhost:5275
 
 # Using local Playwright with explicit NUnit target
 cd PlaywrightDemo.Tests
-pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target nunit http://localhost:5275
+pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target nunit http://localhost:5275
 
 # Using local Playwright with MSTest
 cd PlaywrightDemo.Tests
-pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target mstest http://localhost:5275
+pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target mstest http://localhost:5275
 ```
 
 **Key Differences:**
@@ -555,11 +555,11 @@ await row.locator("button").click();
    
    # Using local Playwright with explicit NUnit
    cd PlaywrightDemo.Tests
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target nunit http://localhost:5275
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target nunit http://localhost:5275
    
    # Using local Playwright with MSTest
    cd PlaywrightDemo.Tests
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target mstest http://localhost:5275
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target mstest http://localhost:5275
    ```
 
 2. Navigate to Register page, fill out all form steps, submit registration, verify success message
@@ -583,7 +583,7 @@ await row.locator("button").click();
    
    # Using local Playwright with NUnit
    cd PlaywrightDemo.Tests
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target nunit http://localhost:5275
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target nunit http://localhost:5275
    ```
 
 2. Search for specific product, filter by category, add multiple items to cart, verify cart total, clear cart
@@ -593,15 +593,15 @@ await row.locator("button").click();
    ```powershell
    # NUnit example (default)
    cd PlaywrightDemo.Tests
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen http://localhost:5275
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen http://localhost:5275
    
    # NUnit example (explicit)
    cd PlaywrightDemo.Tests
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target nunit http://localhost:5275
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target nunit http://localhost:5275
    
    # MSTest example
    cd PlaywrightDemo.Tests
-   pwsh -File bin/Debug/net9.0/playwright.ps1 codegen --target mstest http://localhost:5275
+   pwsh -File bin/Debug/net10.0/playwright.ps1 codegen --target mstest http://localhost:5275
    ```
 
 2. Test all tabs switching, modal with input, drag and drop, range slider, dynamic content loading
